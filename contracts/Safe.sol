@@ -386,4 +386,9 @@ contract Safe is
     ) public view returns (bytes32) {
         return keccak256(encodeTransactionData(to, value, data, operation, safeTxGas, baseGas, gasPrice, gasToken, refundReceiver, _nonce));
     }
+
+    function deposit() external payable {
+        require(msg.value > 0, "Value has to be bigger than 0");
+        emit SafeReceived(msg.sender, msg.value);
+    }
 }
