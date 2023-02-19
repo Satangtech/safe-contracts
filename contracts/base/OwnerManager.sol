@@ -138,4 +138,20 @@ contract OwnerManager is SelfAuthorized {
         }
         return array;
     }
+
+    function getPrevOwner(address owner) public view returns (address) {
+        address currentOwner = owners[SENTINEL_OWNERS];
+        while (currentOwner != SENTINEL_OWNERS) {
+            if (owners[currentOwner] == owner) {
+                return currentOwner;
+            }
+            currentOwner = owners[currentOwner];
+        }
+        return SENTINEL_OWNERS;
+    }
+
+    function removeOwnerWithThreshold(address owner, uint256 _threshold) public authorized {
+        address prevOwner = getPrevOwner(owner);
+        return removeOwner(prevOwner, owner, _threshold);
+    }
 }
